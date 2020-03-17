@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<item>
+		<holding_data>
+			<holding_id></holding_id>
+		</holding_data>
+		<item_data>
+			<is_magnetic>false</is_magnetic>
+			<barcode></barcode>
+			<physical_material_type>ISSUE</physical_material_type>
+			<policy></policy>
+			<!-- <arrival_date comment="set to todays date"></arrival_date> -->
+			<!-- enumeration_a - Volume number  -->
+			<enumeration_a></enumeration_a>
+			<!-- enumeration_b - Number number -->
+			<enumeration_b></enumeration_b>
+			<!-- enumeration_c - Issue number -->
+			<enumeration_c></enumeration_c>
+			<!-- chronology_i - YYYY or YYYY/YYYY -->
+			<chronology_i></chronology_i>
+			<!-- chronology_j - MM or season (SPRING, SUMMER, AUTUMN, WINTER) -->
+			<chronology_j></chronology_j> 
+			<!-- chronology_k DD or DD-DD -->
+			<chronology_k></chronology_k>
+			<!-- public note -->
+			<public_note></public_note>
+			<!-- api identifer -->
+			<receiving_operator>API</receiving_operator>
+			<!--  internal note 1 -->
+			<internal_note_1></internal_note_1>
+			<!-- description -->
+			<description></description>
+			</item_data>
+	</item>
