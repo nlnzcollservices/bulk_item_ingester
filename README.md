@@ -2,7 +2,6 @@
 Adding physical items by system identifiers (MMS ID and a unique barcode) to ALMA via  API
 
 
-
 # Basic usage
 
 There are effectively two users at the moment. One is the library practicioner, one is the script deployer. I hope to merge these roles closer together in time. 
@@ -17,10 +16,10 @@ finished - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item
 title_lookup - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\titles_reference.xlsx
 template - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\input_template.xlsx
 
-1. Library practitioner 
+# 1. Library practitioner 
 
 This is where the real work happens. 
-The librarian starts with a fresh copy of the template spreadsheet. For now, its important that they don't change the order of the columns. 
+The librarian starts with a fresh copy of the `template` spreadsheet. For now, its important that they don't change the order of the columns. 
 They might also get a fresh copy of the title_lookup spreadsheet. This includes all the MMS_ids/titles that are already logged in the system.
 
 ## The process for adding a new item:
@@ -28,7 +27,7 @@ They might also get a fresh copy of the title_lookup spreadsheet. This includes 
 1. Add barcode labels to physical items as needed.
 2. Note the description / enumeration information for the item. 
 3. Add item to sheet strating with the MMS ID. The MMS ID is the most critical piece of information. Please make sure you have the right one. 
-    If there isnt an MMS ID already in the look up for your title, then look on ALMA for the ID. Please make sure you have the right one. 
+    If there isnt an MMS ID already in the look up for your title, then look on ALMA for the ID. Please make sure you have the right one. (See later on for how this works)
 4. Beep in the barcodes. If you only have one, leave the other blank. 
 5. Add in the description/enumeration data as required. These columns reflect how this information is stored  in ALMA. 
 6. Repeat as needed for any items you have. Saving the file when you've finished. 
@@ -47,3 +46,39 @@ Possible issues:
 
 a) Sometimes an item gets added twice. ALMA allows this to happen, but adds the 2nd item with no barcode. If you see any items without barcodes, you can withdraw them if you're comfortable they are an error, or email me and I'll check
 b) Sometimes the holding IDs get messed up... the ATL holding ID is duplicated as the WGN holding ID. I'm not 100% sure why. You will see both barcodes added to a single holding. From ALMA you can associate them with the right holding, and weither update the titles_lookup, or email me. 
+
+# 2. Script deployer
+
+[This is beta. Things will change]
+
+There one primary script `add__items_beta.py`
+
+It doesn't need any arguments - everything is hardcoded per the above locations. 
+
+It can be run from `cmd` (`c:\bulk_ingester_folder>python add__items_beta.py`) or and IDE. I have noticed it seems to be slighty less stable via `cmd`, but that could be my build... 
+
+The script runs and dumps a basic text log of each items outcome to terminal. There is a more noisy logger, accessed by setting the variable `verbose` to `True`. There is also a few log files made in the `logs` folder. `full_audit` captures every interaction outcome, useful for debugging. `success` logs only items that it has succesfully added, used by processing scripts to speed up repeat processing of a sheet.  
+
+Watch the logger, its not unusual for one item to take 10 mins to update. This down to the API call, and should be sorted out in the June 2020 release.
+
+It should 'fail' to add an item gracefully. If it has a problem with an item it eventually gives up, and moves on.
+
+Once its checked all the items on a list, it checks how many barcodes it started with, and how many its logged as sucesssful, and updates to terminal. This is also the process that triggers the move of the whole spreadsheet to `completed` if all the items are added. 
+
+While the sheet resides in the `for_processing` folder, and the script is triggered, each sheet is processed 3 times. This is a result of the slow API. Sometimes the item is added, but we don't get a clean `200` reply from ALMA. In this case, we park the item for now, and move on. Running sheet 3 times helps to clear up these partially complete items. As soon as the sheet is moved (through being fully completed) it moves on anyway. 
+
+Worst case for a processing call is that the API fails to return, and the item doesn't get added. This is rare, but happens on occasions. This is best addressed by adding the MMS ID to the file `mms_time_out_skip_list.txt` put one MMS ID on one line. Any item that uses an MMS ID found in this file will not have an attempt made to process that item.
+
+This means that any sheets that contain items in the skip list will remain in the `for_processing` until the situation is fixed. The sheet will be picked up for processing, but all the skipped items will not be processed. All other items will be. It is therefor recommended that problem items are split out into their own spreadsheet. 
+
+## Process steps
+
+This is the basic workflow, and sub processes that are used. 
+
+1. Make list of all workbooks in the `for_processing` folder. Process one by one. 
+2. Check if a `success` log exists for that workbook filename. If yes, collect all the barcodes that are logged as successful.
+3. Read each row of sheet. check each barcode. If already seen (found via parsing the `success` log) skip barcode.
+4. If new barcode, get mms id from sheet and look it up in the `title_lookup` item. If not found, do missing MMS process. 
+5. Create data object, using the template xml file. 
+
+### Missing MMS
