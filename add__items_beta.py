@@ -22,7 +22,8 @@ print ()
 class Master_Data(object):
 	"""Holds the master data items  / vars that are used through out the process."""
 	def __init__(self):
-		self.mms_timeout_skip_list = self.get_mms_timeout_skip_list()
+		# self.mms_timeout_skip_list = self.get_mms_timeout_skip_list()
+		self.mms_timeout_skip_list = []
 		self.api_key = None
 		self.system = None
 		self.titles_lookup = {} 
@@ -587,6 +588,7 @@ def fish_for_new_record(mms_id, titles_lookup):
 	headers = {'content-type':'application/xml'}
 	url =  f"https://api-eu.hosted.exlibrisgroup.com/almaws/v1/acq/po-lines?q=mms_id~{mms_id}&status=ACTIVE&limit=100&offset=0&order_by=title&direction=desc&apikey={master.api_key}&expand=LOCATIONS"
 	r = requests.get(url, headers=headers)
+	soup = BeautifulSoup(r.text, "lxml")
 	
 	if verbose:
 		print (f"Getting records data from: {r.url}")
@@ -596,10 +598,16 @@ def fish_for_new_record(mms_id, titles_lookup):
 	if 'po_lines total_record_count="0"' in r.text:
 		print (f"Check mms id {mms_id}" )
 		quit()
-	else:
+	elif soup.find("title").text == None:
+		if verbose:
+			stand_down = 30
+			print (f"Look up failed - waiting for {stand_down} seconds to try again")
+		time.sleep(stand_down ) 
+		r = requests.get(url, headers=headers)
 		soup = BeautifulSoup(r.text, "lxml")
-		title = soup.find("title").text
+	else:
 
+		title = soup.find("title").text
 		pol_id = soup.find("number").text
 		locations = soup.find_all("location")
 
