@@ -236,7 +236,11 @@ def get_xlsx_spreadsheet(f):
 			pass
 		else:
 			for cell in row[0:len_data]:
-				my_row.append(cell.value)
+				try:
+					my_row.append(cell.value.strip())
+				except:
+					my_row.append(cell.value) 
+
 			if my_row != [None for x in range(len_data)]:
 				my_data.append(my_row[0:len_data])
 	return my_data
@@ -338,11 +342,23 @@ def make_new_item_in_alma(po_line_id, item_as_xml, barcode, holding_id, my_item_
 	if not barcode_in_alma(barcode):
 		if verbose:
 			print (f"{barcode} - Not in ALMA - adding item... {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
 		make_item_request = requests.post(new_item_url, headers=headers, data=item_as_xml.encode('utf-8'))
+
+
+
 		if verbose:
 			print (f"Request made...{make_item_request.status_code} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-		if make_item_request.status_code != 200:
+		if make_item_request.status_code == 400:
+			print ("err02: something went wrong")
+			print ()
+			print (new_item_url)
+			print ()
+			print (item_as_xml)
+			quit()
+
+		elif make_item_request.status_code != 200:
 			if verbose:
 				print (f"Done adding - moving to cleanup. {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 		elif make_item_request.status_code == 200:
@@ -359,9 +375,14 @@ def make_new_item_in_alma(po_line_id, item_as_xml, barcode, holding_id, my_item_
 	if verbose:
 		print (f"Getting updated item object from ALMA - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 	item_from_alma_as_xml = get_item_by_barcode(barcode)
+
+	# print (item_from_alma_as_xml)
+
+	# quit()
 	if verbose:
 		print (f"Got item object from ALMA - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 	soup = BeautifulSoup(item_from_alma_as_xml, "xml")
+
 	item_id = soup.find("item")
 	if soup.find("item") != None:
 		item_url = item_id['link']+f"?apikey={master.api_key}"
@@ -380,6 +401,8 @@ def make_new_item_in_alma(po_line_id, item_as_xml, barcode, holding_id, my_item_
 			if verbose:
 				print (f"Item updated request made - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 			r = requests.put(item_url, headers=headers, data=item_from_alma_as_xml.encode('utf-8'))
+
+
 
 			if r.status_code == 200:
 				print (f"Item {barcode} is in ALMA and was updated.")
@@ -681,7 +704,7 @@ if len(my_workbooks) == 0:
 
 
 master.set_prod(True)
-verbose = False
+verbose = True
 test_run = False
 
 for my_workbook in my_workbooks:
