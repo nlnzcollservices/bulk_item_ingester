@@ -24,9 +24,9 @@ The file can live anywhere - its just a text file.
 
 Make sure to add the following 3 lines, replacing the my_api_key string with your valid ALMA api keys:
 
-[configuration]
-PRODUCTION = my_production_key_key
-SANDBOX = my_sandbox_api_key
+    [configuration]
+    PRODUCTION = my_production_key_key
+    SANDBOX = my_sandbox_api_key
 
 
 ### 1. Library practitioner 
