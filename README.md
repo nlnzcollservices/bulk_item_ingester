@@ -6,17 +6,19 @@ Adding physical items by system identifiers (MMS ID and a unique barcode) to ALM
 
 There are effectively two users at the moment. One is the library practicioner, one is the script deployer. I hope to merge these roles closer together in time. 
 
-There are a few variables that are set in the scripts to point to some specifc files and locations. I'll list them here and use a shorter vriable name for the rest of the documentation. 
+There are a few variables that are set in the scripts to point to some specifc files and locations. I'll list them here and use a shorter variable name for the rest of the documentation. 
 
-logs_folder - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\logs
-spreadsheets_folder - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets
-for_processing - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\for_processing
-completed - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\completed
-finished - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\finished
-title_lookup - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\titles_reference.xlsx
-template - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\input_template.xlsx
+    logs_folder - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\logs
+    spreadsheets_folder - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets
+    for_processing - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\for_processing
+    completed - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\completed
+    finished - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\spreadsheets\finished
+    title_lookup - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\titles_reference.xlsx
+    template - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\input_template.xlsx
 
-secrets = c:\sources\secrets
+and finally, 
+
+    secrets = c:\sources\secrets
 
 This is a special file - its so we can share code without exposing each others API keys internally, or publically. 
 
