@@ -16,6 +16,19 @@ finished - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item
 title_lookup - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\titles_reference.xlsx
 template - G:\Fileplan\Bib_Services\Non-Clio_formats\Acquisitions Team\bulk item ingest\input_template.xlsx
 
+secrets = c:\sources\secrets
+
+This is a special file - its so we can share code without exposing each others API keys internally, or publically. 
+
+The file can live anywhere - its just a text file. 
+
+Make sure to add the following 3 lines, replacing the my_api_key string with your valid ALMA api keys:
+
+[configuration]
+PRODUCTION = my_production_key_key
+SANDBOX = my_sandbox_api_key
+
+
 ### 1. Library practitioner 
 
 This is where the real work happens. 
