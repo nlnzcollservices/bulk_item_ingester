@@ -305,14 +305,14 @@ def make_description(enum_a, enum_b, enum_c, chron_i, chron_j, chron_k, verbose=
 			if verbose:
 				print ("#17")
 				# print (enum_a and not enum_b and enum_c and chron_i and not chron_j and not chron_k)
-			return f"v. {enum_a}, {enum_c} ({chron_i})"
+			return f"v. {enum_a}, iss. {enum_c} ({chron_i})"
 
 		### case 18 v., iss. (YYYY MM) - Volume, Issue, Year & Month
 		elif enum_a and not enum_b and enum_c and chron_i and chron_j and not chron_k:
 			if verbose:
 				print ("#18")
 				# print (enum_a and not enum_b and enum_c and chron_i and chron_j and not chron_k)
-			return f"v. {enum_a}, {enum_c} ({chron_i} {chron_j})"
+			return f"v. {enum_a}, iss. {enum_c} ({chron_i} {chron_j})"
 
 		### case 19 v., no., iss. (YYYY) - Volume, Number, Issue, Year ### description 
 		elif enum_a and enum_b and enum_c and chron_i and not chron_j and not chron_k:
