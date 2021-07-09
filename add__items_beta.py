@@ -15,7 +15,8 @@ secret_file = r"c:\source\secrets"
 config = configparser.ConfigParser()
 config.read(secret_file)
 prod_key = config.get("configuration", "PRODUCTION")
-sand_key = config.get("configuration", "SANDBOX") 
+sand_key = config.get("configuration", "SANDBOX")
+alma_username = config.get("configuration", "USERNAME") 
 print ()
 
 
@@ -59,7 +60,7 @@ class Item(object):
 					"mms_id":"",
 					"internal_note_1":"", 
 					"public_note":"",
-					"receiving_operator":"gattusoj_API",
+					"receiving_operator":f"{alma_username}_API",
 					"description":"",
 					"chron_i":"",
 					"chron_j":"",

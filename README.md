@@ -27,12 +27,12 @@ and finally,
 
 This is a text file that the script deployer saves locally so that sensitive credentials like API keys are not shared. 
 
-Make sure to add the following 3 lines to your personal 'secrets' file, replacing the `my_api_key` string with your own valid ALMA API keys:
+Make sure to add the following 4 lines to your personal 'secrets' file, replacing the `my_api_key` string with your own valid ALMA API keys, and the 'my_Alma_username' string with your own Alma username:
 
     [configuration]
-    PRODUCTION = my_production_key_key
-    SANDBOX = my_sandbox_api_key
-
+    PRODUCTION = my_production_API_key
+    SANDBOX = my_sandbox_API_key
+    USERNAME = my_Alma_username
 
 ### 1. Librarian practitioner 
 
@@ -74,7 +74,7 @@ There is one primary script: `add__items_beta.py`
 
 It doesn't need any arguments. Everything is hardcoded with the locations listed above. 
 
-It can be run from `cmd` (`c:\bulk_ingester_folder>python add__items_beta.py`) or an IDE. NB: it seems to be slightly less stable via `cmd`. <!--What does 'stable' mean in this context? AJ-->
+It can be run from `cmd` (`c:\bulk_ingester_folder>python add__items_beta.py`) or an IDE. NB: it seems to be slightly less stable via `cmd`. <!--a)does that always have to be the location? b) What does 'stable' mean in this context? AJ-->
 
 The script runs and prints a basic text log of each item's outcome to terminal. There is a more noisy logger, accessed by setting the variable `verbose` to `True`. There is also a few log files made in the `logs` folder. `full_audit` is useful for debugging as it captures every interaction outcome. `success` logs only items that it has successfully added; it is used by the processing script itself to speed up repeat processing of a partially-completed sheet.
 
