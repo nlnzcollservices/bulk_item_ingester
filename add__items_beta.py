@@ -120,9 +120,9 @@ class Logger(object):
 			'description':description}
 
 		if item['mms_id'] not in self.existing_log_data:
-			with open(self.successfully_added, 'a') as data:
+			with open(self.successfully_added, 'a', encoding="utf-8") as data:
 				data.write(f"{mms_id} | {master.titles_lookup[item['mms_id']]['title']} | {item['system']} | {item['holding_id']} | {item_id} | {barcode} | {description}\n")
-		with open(self.audit, 'a') as data:
+		with open(self.audit, 'a', encoding="utf-8") as data:
 			data.write(f"{mms_id} | {master.titles_lookup[item['mms_id']]['title']} | {item['system']} | {item['holding_id']} | {item_id} | {barcode} | {description} | Outcome: Added OK\n")
 
 	def log_dup_item(self, mms_id, holding_id, description, barcode):
@@ -174,7 +174,7 @@ class Logger(object):
 		records list of succesfully processed barcodes"""
 
 		if os.path.exists(self.successfully_added):
-			with open(self.successfully_added) as data:
+			with open(self.successfully_added, encoding="utf-8") as data:
 				for line in [x for x in data.read().split("\n") if x != '']:
 					parts = line.split(" | ")
 					barcode = parts[5]
@@ -182,7 +182,7 @@ class Logger(object):
 					self.succesful.append(str(barcode))
 
 		if os.path.exists(self.dup_log_file):
-			with open(self.dup_log_file) as data:
+			with open(self.dup_log_file, encoding="utf-8") as data:
 				for line in [x for x in data.read().split("\n") if x != '']:
 					parts = line.split(" | ")
 					barcode = parts[4]
